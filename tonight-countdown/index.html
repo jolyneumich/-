@@ -52,7 +52,7 @@ h2,h3{text-wrap:balance;margin:0}
 /* now view */
 .now-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:start}
 @media (max-width:820px){.now-grid{grid-template-columns:minmax(0,1fr)}}
-.focus{display:grid;gap:18px;justify-items:center;text-align:center}
+.focus{display:grid;gap:14px;justify-items:center;text-align:center}
 .ring-wrap{position:relative;width:min(300px,78vw);aspect-ratio:1;max-width:100%}
 .ring-wrap svg{width:100%;height:100%;display:block}
 .ring-center{position:absolute;inset:0;display:grid;place-items:center;pointer-events:none}
@@ -86,14 +86,14 @@ svg .halo{fill:none;stroke:var(--alarm);stroke-width:6;opacity:0}
 .btn:disabled{opacity:.45;cursor:not-allowed}
 .side{display:grid;gap:16px;min-width:0}
 .stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-bottom:16px}
-.stat .v{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:28px;font-weight:700;line-height:1.1}
+.stat .v{font-family:var(--f-num);font-variant-numeric:tabular-nums;font-size:22px;font-weight:700;line-height:1.1}
 .stat .k{font-size:12px;color:var(--muted);letter-spacing:.06em}
 .stat.bad .v{color:var(--alarm)} .stat.good .v{color:var(--ok)}
-.timeline{position:relative;height:44px;border-radius:8px;background:var(--track);overflow:hidden}
+.timeline{position:relative;height:32px;border-radius:8px;background:var(--track);overflow:hidden}
 .timeline .past{position:absolute;top:0;bottom:0;left:0;background:repeating-linear-gradient(135deg,var(--alarm-soft) 0 6px,transparent 6px 12px);border-right:0}
 .timeline .seg{position:absolute;top:6px;bottom:6px;background:var(--lamp);border-radius:4px}
 .timeline .seg.done{background:var(--ok)}
-.timeline .ghost{position:absolute;top:6px;bottom:6px;border:1.5px dashed var(--muted);border-radius:4px;font-size:11px;color:var(--muted);padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:30px}
+.timeline .ghost{position:absolute;top:6px;bottom:6px;border:1.5px dashed var(--muted);border-radius:4px;font-size:11px;color:var(--muted);padding:0 4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:18px}
 .timeline .ghost.spill{border-color:var(--alarm);color:var(--alarm)}
 .timeline .nowline{position:absolute;top:0;bottom:0;width:2px;background:var(--ink)}
 .axis{position:relative;height:18px;margin-top:4px;font-family:var(--f-num);font-size:11px;color:var(--muted)}
@@ -101,15 +101,17 @@ svg .halo{fill:none;stroke:var(--alarm);stroke-width:6;opacity:0}
 .axis span:first-child{transform:none}.axis span:last-child{transform:translateX(-100%)}
 .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-top:8px}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
-.proj{margin:10px 0 0;font-size:14px}
+.proj{margin:12px 0 0;font-size:13px;color:var(--muted)}
+.linkbtn{border:0;background:none;color:var(--muted);font-size:13px;cursor:pointer;padding:2px 4px;text-decoration:underline;text-underline-offset:3px}
+.linkbtn:hover{color:var(--ink)}
 .proj.bad{color:var(--alarm)}
 .queue h3{font-size:15px}
 .qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
 #sampleNote{margin:0 0 8px}
 .queue ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
-.queue li{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
+.queue li{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line)}
 .queue li:first-child{border-top:0}
-.dot{width:10px;height:10px;border-radius:50%;margin-top:6px;border:2px solid var(--muted)}
+.dot{width:10px;height:10px;border-radius:50%;align-self:start;margin-top:7px;border:2px solid var(--muted)}
 .dot.running{background:var(--lamp);border-color:var(--lamp)} .dot.done{background:var(--ok);border-color:var(--ok)} .dot.paused{border-color:var(--lamp)}
 .queue .nm{font-weight:500}
 .queue li.done .nm{text-decoration:line-through;color:var(--muted)}
@@ -214,10 +216,9 @@ code{font-family:var(--f-num);font-size:12.5px;background:var(--surface-2);paddi
             <div class="stats" id="stats"></div>
             <div class="timeline" id="timeline"></div>
             <div class="axis" id="axis"></div>
-            <div class="legend"><span><i style="background:var(--ok)"></i>做完的</span><span><i style="background:var(--lamp)"></i>在做</span><span><i style="background:repeating-linear-gradient(135deg,var(--alarm) 0 2px,transparent 2px 4px)"></i>没在做的时间</span><span><i style="border:1.5px dashed var(--muted)"></i>还没做</span></div>
             <p class="proj" id="proj"></p>
           </div>
-          <div class="card queue"><div class="qhead"><h3>今晚的队列</h3><button class="btn primary small" type="button" data-act="add">+ 加今天要做的事</button></div><p class="note" id="sampleNote" hidden>下面是示例任务。点右上角按钮加你自己的，加第一件时示例会自动清掉。</p><ol id="queue"></ol></div>
+          <div class="card queue"><div class="qhead"><h3>今晚的队列</h3><button class="btn primary small" type="button" data-act="add">+ 加今天要做的事</button></div><ol id="queue"></ol></div>
         </div>
       </div>
     </section>
@@ -555,7 +556,7 @@ function savePark(){
 
 /* ---------- render: now ---------- */
 function ringSVG(frac,cls){
-  let ticks='';for(let i=0;i<60;i++){const a=i/60*2*Math.PI,maj=i%5===0,r1_=maj?100:104,r2=110;
+  let ticks='';for(let i=0;i<12;i++){const a=i/12*2*Math.PI,maj=i%3===0,r1_=maj?101:105,r2=110;
     ticks+=`<line class="tick${maj?' major':''}" x1="${(120+r1_*Math.sin(a)).toFixed(1)}" y1="${(120-r1_*Math.cos(a)).toFixed(1)}" x2="${(120+r2*Math.sin(a)).toFixed(1)}" y2="${(120-r2*Math.cos(a)).toFixed(1)}"/>`}
   let wedge='';frac=Math.max(0,Math.min(1,frac));
   if(frac>=.9995)wedge='<circle class="fill" cx="120" cy="120" r="94"/>';
@@ -588,7 +589,7 @@ function renderRing(){
   else if(nt)c=`<button class="btn ${i&&i.idle&&stageFor(i.ms)>=2?'warn':'primary'} big" data-act="start">${t<night.winStart?'提前开始':'开始'}</button>`;
   else if(night.tasks.length)c=`<button class="btn primary big" data-act="end">结束今晚并记录</button>`;
   else c=`<button class="btn primary big" data-act="tab" data-tab="plan">去排计划</button>`;
-  if(!night.ended&&(r||nt)&&t>night.winStart)c+=`<button class="btn ghost" data-act="end">结束今晚</button>`;
+  if(!night.ended&&(r||nt)&&t>night.winEnd)c+=`<button class="btn ghost" data-act="end">结束今晚并记录</button>`;
   setHTML($('#controls'),c);
 }
 function renderSide(){
@@ -602,7 +603,7 @@ function renderSide(){
     for(const [a,b] of segs){const l=pos(a),w=Math.max(.6,pos(b)-l);h+=`<div class="seg ${k.status==='done'?'done':''}" style="left:${l}%;width:${w}%" title="${esc(k.name)}"></div>`}}
   const p=projection();
   for(const o of p.items){if(o.start>=night.winEnd)continue;const l=pos(Math.max(o.start,t)),w=pos(o.end)-l;if(w<=0)continue;
-    h+=`<div class="ghost ${o.end>night.winEnd?'spill':''}" style="left:${l}%;width:${w}%" title="${esc(o.task.name)}">${esc(o.task.name)}</div>`}
+    h+=`<div class="ghost ${o.end>night.winEnd?'spill':''}" style="left:${l}%;width:${w}%" title="${esc(o.task.name)}">${w>9?esc(o.task.name):''}</div>`}
   if(t>=night.winStart&&t<=night.winEnd)h+=`<div class="nowline" style="left:calc(${pos(t)}% - 1px)"></div>`;
   $('#timeline').innerHTML=h;
   const step=W>3*3600e3?30*MIN:15*MIN;let ax='';for(let x=night.winStart;x<=night.winEnd+1;x+=step)ax+=`<span style="left:${pos(x)}%">${hm(x)}</span>`;
@@ -613,13 +614,12 @@ function renderSide(){
   else if(!p.items.length){pr.className='proj';pr.textContent=night.tasks.length?'计划里的事都做完了。':''}
   else if(p.over>0){pr.className='proj bad';pr.textContent=`照这样下去，${hm(p.end)} 才能做完，比计划晚 ${p.over} 分钟。剩下 ${p.items.length} 件，按时只能做完 ${p.fit} 件。`}
   else{pr.className='proj';pr.textContent=`照这样下去，${hm(p.end)} 做完，还有 ${Math.round((night.winEnd-p.end)/MIN)} 分钟余量。`}
-  $('#sampleNote').hidden=!night.sample;
   const plan=staticPlan();
   setHTML($('#queue'),night.tasks.map(k=>{const st=k.id===night.runningId?'running':k.status;const el=elapsed(k);
     return `<li class="${st}"><span class="dot ${st}"></span><div><div class="nm">${esc(k.name)}</div>
-    <div class="mt num">计划 ${hm(plan[k.id])} · 预计 ${k.est} 分${el>=MIN||k.status==='done'?` · 实际 ${Math.round(el/MIN)} 分`:''}${k.scolds?` · 被骂 ${k.scolds} 次`:''}</div>
+    <div class="mt num">${hm(plan[k.id])} · ${k.est} 分${el>=MIN||k.status==='done'?` · 已做 ${Math.round(el/MIN)}`:''}</div>
     ${k.parking&&k.status!=='done'?`<div class="pk">停在：${esc(k.parking)}</div>`:''}</div>
-    <div>${st!=='done'&&st!=='running'&&!night.ended&&nextTask()!==k?`<button class="btn small" data-act="first" data-id="${k.id}">先做这个</button>`:''}</div></li>`}).join('')||'<li><span></span><div class="mt">还没有任务。点右上角「+ 加今天要做的事」。</div><span></span></li>');
+    <div>${st!=='done'&&st!=='running'&&!night.ended&&nextTask()!==k?`<button class="linkbtn" data-act="first" data-id="${k.id}">先做</button>`:''}</div></li>`}).join('')||'<li><span></span><div class="mt">还没有任务。点右上角「+ 加今天要做的事」。</div><span></span></li>');
 }
 
 /* ---------- render: plan ---------- */
@@ -628,7 +628,7 @@ function renderPlan(){
   const over=total+brk-W;
   $('#planSum').innerHTML=`<div><div class="eyebrow">今晚</div><div class="num" style="font-size:20px;font-weight:700">${hm(night.winStart)}–${hm(night.winEnd)}（${W} 分钟）</div>
     <div class="note ${over>0?'bad':''}">计划 ${total} 分 + 休息 ${brk} 分 = ${total+brk} 分${over>0?`，超了 ${over} 分钟。删一件，或者接受它做不完。`:`，余 ${-over} 分钟。`}</div></div>
-    <div class="inline"><button class="btn" type="button" data-act="fromnow">改成从现在开始</button>${night.sample?'<span class="note">现在是示例任务，改成你自己的就行。</span>':''}</div>`;
+    <div class="inline"><button class="btn" type="button" data-act="fromnow">改成从现在开始</button>${night.ended?'':'<button class="btn ghost" type="button" data-act="end">结束今晚并记录</button>'}${night.sample?'<span class="note">现在是示例任务，改成你自己的就行。</span>':''}</div>`;
   const plan=staticPlan();
   $('#planList').innerHTML=night.tasks.map((k,i)=>`<div class="planrow ${k.status==='done'?'done':''}" data-id="${k.id}">
     <div class="when">${hm(plan[k.id])}</div>
