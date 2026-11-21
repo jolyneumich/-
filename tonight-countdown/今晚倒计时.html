@@ -108,7 +108,9 @@ svg .halo{fill:none;stroke:var(--alarm);stroke-width:6;opacity:0}
 .legend i{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:5px;vertical-align:-1px}
 .proj{margin:10px 0 0;font-size:14px}
 .proj.bad{color:var(--alarm)}
-.queue h3{font-size:15px;margin-bottom:10px}
+.queue h3{font-size:15px}
+.qhead{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:10px}
+#sampleNote{margin:0 0 8px}
 .queue ol{list-style:none;margin:0;padding:0;display:grid;gap:2px}
 .queue li{display:grid;grid-template-columns:14px minmax(0,1fr) auto;gap:10px;align-items:start;padding:10px 0;border-top:1px solid var(--line)}
 .queue li:first-child{border-top:0}
@@ -222,7 +224,7 @@ code{font-family:var(--f-num);font-size:12.5px;background:var(--surface-2);paddi
             <div class="legend"><span><i style="background:var(--ok)"></i>做完的</span><span><i style="background:var(--lamp)"></i>在做</span><span><i style="background:repeating-linear-gradient(135deg,var(--alarm) 0 2px,transparent 2px 4px)"></i>没在做的时间</span><span><i style="border:1.5px dashed var(--muted)"></i>还没做</span></div>
             <p class="proj" id="proj"></p>
           </div>
-          <div class="card queue"><h3>今晚的队列</h3><ol id="queue"></ol></div>
+          <div class="card queue"><div class="qhead"><h3>今晚的队列</h3><button class="btn primary small" type="button" data-act="add">+ 加今天要做的事</button></div><p class="note" id="sampleNote" hidden>下面是示例任务。点右上角按钮加你自己的，加第一件时示例会自动清掉。</p><ol id="queue"></ol></div>
         </div>
       </div>
     </section>
@@ -618,12 +620,13 @@ function renderSide(){
   else if(!p.items.length){pr.className='proj';pr.textContent=night.tasks.length?'计划里的事都做完了。':''}
   else if(p.over>0){pr.className='proj bad';pr.textContent=`照这样下去，${hm(p.end)} 才能做完，比计划晚 ${p.over} 分钟。剩下 ${p.items.length} 件，按时只能做完 ${p.fit} 件。`}
   else{pr.className='proj';pr.textContent=`照这样下去，${hm(p.end)} 做完，还有 ${Math.round((night.winEnd-p.end)/MIN)} 分钟余量。`}
+  $('#sampleNote').hidden=!night.sample;
   const plan=staticPlan();
   setHTML($('#queue'),night.tasks.map(k=>{const st=k.id===night.runningId?'running':k.status;const el=elapsed(k);
     return `<li class="${st}"><span class="dot ${st}"></span><div><div class="nm">${esc(k.name)}</div>
     <div class="mt num">计划 ${hm(plan[k.id])} · 预计 ${k.est} 分${el>=MIN||k.status==='done'?` · 实际 ${Math.round(el/MIN)} 分`:''}${k.scolds?` · 被骂 ${k.scolds} 次`:''}</div>
     ${k.parking&&k.status!=='done'?`<div class="pk">停在：${esc(k.parking)}</div>`:''}</div>
-    <div>${st!=='done'&&st!=='running'&&!night.ended&&nextTask()!==k?`<button class="btn small" data-act="first" data-id="${k.id}">先做这个</button>`:''}</div></li>`}).join('')||'<li><span></span><div class="mt">还没有任务。去“计划”里加。</div><span></span></li>');
+    <div>${st!=='done'&&st!=='running'&&!night.ended&&nextTask()!==k?`<button class="btn small" data-act="first" data-id="${k.id}">先做这个</button>`:''}</div></li>`}).join('')||'<li><span></span><div class="mt">还没有任务。点右上角「+ 加今天要做的事」。</div><span></span></li>');
 }
 
 /* ---------- render: plan ---------- */
@@ -727,6 +730,7 @@ document.addEventListener('click',e=>{
   switch(a){
     case 'tab':setTab(b.dataset.tab);break;
     case 'start':startTask();break;
+    case 'add':setTab('plan');setTimeout(()=>{const n=$('#aName');n.scrollIntoView({block:'center'});n.focus()},30);break;
     case 'pause':stopTask('pause');break;
     case 'done':stopTask('done');break;
     case 'end':if(b.dataset.confirm){endNight()}else{b.dataset.confirm='1';b.textContent='再点一次确认结束';setTimeout(()=>{if(b.isConnected){delete b.dataset.confirm;render()}},3000)}break;
